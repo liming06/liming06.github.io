@@ -1,7 +1,7 @@
 // 只需编辑这里即可替换个人资料。留空的简介、作品会显示待补充状态。
 const profile = {
-  name: 'yzygbtfxdr-stack',
-  github: 'https://github.com/yzygbtfxdr-stack',
+  name: 'liming06',
+  github: 'https://liming06.github.io/',
   intro: '欢迎来到我的个人空间。在这里，了解我，也看看我的作品。',
   bio: '',
   tags: [],
