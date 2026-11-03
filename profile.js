@@ -1,40 +1,109 @@
-// 只需编辑这里即可替换个人资料。留空的简介、作品会显示待补充状态。
+// Edit this object to update your personal information.
 const profile = {
-  name: 'liming06',
+  name: 'Lucas',
+  handle: 'liming06',
   github: 'https://github.com/liming06',
-  intro: '欢迎来到我的个人空间。在这里，了解我，也看看我的作品。',
-  bio: '',
-  tags: [],
-  // 例如：{ title: '项目名称', description: '项目简介', url: 'https://github.com/你的账号/项目' }
+  intro:
+    "Master's student researching low-altitude airspace planning and intelligent airspace scheduling.",
+  bio:
+    "I'm Lucas, a master's student. My research focuses on low-altitude airspace planning and intelligent airspace scheduling.",
+  tags: [
+    "Master's Student",
+    'Low-Altitude Airspace Planning',
+    'Intelligent Airspace Scheduling'
+  ],
+  // Add projects here:
+  // {
+  //   title: 'Project name',
+  //   description: 'A short description of the project.',
+  //   url: 'https://github.com/liming06/repository-name'
+  // }
   projects: []
 };
 
-const setText = (id, value) => { document.getElementById(id).textContent = value; };
+function setText(id, value) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.textContent = value;
+  }
+}
+
+function safeUrl(value) {
+  try {
+    const url = new URL(value);
+    return ['https:', 'http:'].includes(url.protocol)
+      ? url.href
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 setText('display-name', profile.name);
 setText('footer-name', profile.name);
+setText('handle', `@${profile.handle}`);
 setText('intro', profile.intro);
 setText('year', new Date().getFullYear());
-document.title = `${profile.name} · 个人主页`;
-function safeUrl(value) {
-  try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? url.href : null; }
-  catch { return null; }
-}
+
+document.title = `${profile.name} · Personal Website`;
+
 const github = safeUrl(profile.github);
-if (github) document.querySelectorAll('.github-link').forEach(link => { link.href = github; });
-if (profile.bio) { setText('bio', profile.bio); document.getElementById('bio-note').hidden = true; }
-if (profile.tags.length) {
-  document.getElementById('tags').replaceChildren(...profile.tags.map(tag => {
-    const item = document.createElement('span'); item.textContent = tag; return item;
-  }));
+
+if (github) {
+  document.querySelectorAll('.github-link').forEach(link => {
+    link.href = github;
+  });
 }
-if (profile.projects.length) {
-  document.getElementById('projects').replaceChildren(...profile.projects.map((project, i) => {
-    const url = safeUrl(project.url);
-    const card = document.createElement(url ? 'a' : 'article'); card.className = 'project-card';
-    if (url) { card.href = url; card.target = '_blank'; card.rel = 'noopener noreferrer'; }
-    const number = document.createElement('span'); number.className = 'project-index'; number.textContent = `PROJECT / ${String(i + 1).padStart(2, '0')}`;
-    const title = document.createElement('h3'); title.textContent = project.title;
-    const description = document.createElement('p'); description.textContent = project.description;
-    card.append(number, title, description); return card;
-  }));
+
+if (profile.bio) {
+  setText('bio', profile.bio);
+
+  const note = document.getElementById('bio-note');
+  if (note) {
+    note.hidden = true;
+  }
+}
+
+const tags = document.getElementById('tags');
+
+if (tags && profile.tags.length) {
+  tags.replaceChildren(
+    ...profile.tags.map(tag => {
+      const item = document.createElement('span');
+      item.textContent = tag;
+      return item;
+    })
+  );
+}
+
+const projects = document.getElementById('projects');
+
+if (projects && profile.projects.length) {
+  projects.replaceChildren(
+    ...profile.projects.map((project, index) => {
+      const url = safeUrl(project.url);
+      const card = document.createElement(url ? 'a' : 'article');
+      card.className = 'project-card';
+
+      if (url) {
+        card.href = url;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+      }
+
+      const number = document.createElement('span');
+      number.className = 'project-index';
+      number.textContent =
+        `PROJECT / ${String(index + 1).padStart(2, '0')}`;
+
+      const title = document.createElement('h3');
+      title.textContent = project.title;
+
+      const description = document.createElement('p');
+      description.textContent = project.description;
+
+      card.append(number, title, description);
+      return card;
+    })
+  );
 }
